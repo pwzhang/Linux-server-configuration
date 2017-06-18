@@ -1,10 +1,10 @@
 # Linux-Server-Configuration-UDACITY
 
-IP Adress: http://54.210.95.73
-SSH port: 2200
-SSH key: locate in /home/vagrant/.ssh/grader
-user name: grader
-passphrase for key '/home/vagrant/.ssh/grader': 123456
+IP Adress: http://54.210.95.73 
+SSH port: 2200 
+SSH key: locate in /home/vagrant/.ssh/grader 
+user name: grader 
+passphrase for key '/home/vagrant/.ssh/grader': 123456 
 
 ## Launch Virtual Machine
 1. ```vagrant up```
