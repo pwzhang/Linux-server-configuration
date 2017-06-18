@@ -1,10 +1,10 @@
 # Linux-Server-Configuration-UDACITY
 
-1. IP Adress: http://54.210.95.73 
-2. SSH port: 2200 
-3. SSH key: locate in /home/vagrant/.ssh/grader 
-4. user name: grader 
-5. passphrase for key '/home/vagrant/.ssh/grader': 123456 
+1. IP Adress: http://54.210.95.73
+2. SSH port: 2200
+3. SSH key: locate in /home/vagrant/.ssh/grader
+4. user name: grader
+5. passphrase for key '/home/vagrant/.ssh/grader': 123456
 
 ## Launch Virtual Machine
 1. ```vagrant up```
@@ -95,14 +95,15 @@ Meanwhile, add custom port 2200/tcp and 123/tcp in AWS console.
 ## Install git, clone and setup your Catalog App project.
 1. Install Git using `sudo apt-get install git`
 2. Use `cd /var/www` to move to the /var/www directory
-3. Create the application directory `sudo mkdir Restaurant-Catalog`
-4. Move inside this directory using `cd Restaurant-Catalog`
+3. Create the application directory `sudo mkdir CatalogApp`
+4. Move inside this directory using `cd CatalogApp`
 5. Clone the Catalog App to the virtual machine `git clone https://github.com/pwzhang/Item-catalog.git`
-6. Move to the inner directory using `cd Item-catalog`
-7. Rename `project.py` to `__init__.py` using `sudo mv website.py __init__.py`
-8. Edit `database_setup.py`, `__init__.py` and `lotssofmenus.py` and change `engine = create_engine('sqlite:///restaurantmenu.db')` to `engine = create_engine('postgresql://catalog:password@localhost/catalog')`
-9. Install pip `sudo apt-get install python-pip`
-10. Use pip to install dependencies
+6. change the name of the folder using `sudo mv Item-catalog CatalogApp`
+7. Move to the inner directory using `cd CatalogApp`
+8. Rename `project.py` to `__init__.py` using `sudo mv website.py __init__.py`
+9. Edit `database_setup.py`, `__init__.py` and `lotssofmenus.py` and change `engine = create_engine('sqlite:///restaurantmenu.db')` to `engine = create_engine('postgresql://catalog:password@localhost/catalog')`
+10. Install pip `sudo apt-get install python-pip`
+11. Use pip to install dependencies
    ```
    sudo pip install flask
    sudo apt-get -qqy install postgresql python-psycopg2
@@ -112,24 +113,24 @@ Meanwhile, add custom port 2200/tcp and 123/tcp in AWS console.
    sudo pip install requests
    sudo pip install passlib
    ```
-11. Create database schema `sudo python database_setup.py`
+12. Create database schema `sudo python database_setup.py`
 
 
 ## Configure and Enable a New Virtual Host
-1. Create Restaurant-Catalog.conf to edit: `sudo nano /etc/apache2/sites-available/Restaurant-Catalog.conf`
+1. Create Restaurant-Catalog.conf to edit: `sudo nano /etc/apache2/sites-available/CatalogApp.conf`
 2. Add the following lines of code to the file to configure the virtual host.
 
 	```
 	<VirtualHost *:80>
 		ServerName 54.210.95.73
 		ServerAdmin zhangpw@bu.edu
-		WSGIScriptAlias / /var/www/Restaurant-Catalog/myapp.wsgi
-		<Directory /var/www/Restaurant-Catalog/Item-catalog/>
+		WSGIScriptAlias / /var/www/CatalogApp/myapp.wsgi
+		<Directory /var/www/CatalogApp/CatalogApp/>
 			Order allow,deny
 			Allow from all
 		</Directory>
-		Alias /static /var/www/Restaurant-Catalog/Item-catalog/static
-		<Directory /var/www/Restaurant-Catalog/Item-catalog/static/>
+		Alias /static /var/www/CatalogApp/CatalogApp/static
+		<Directory /var/www/CatalogApp/CatalogApp/static/>
 			Order allow,deny
 			Allow from all
 		</Directory>
@@ -138,7 +139,7 @@ Meanwhile, add custom port 2200/tcp and 123/tcp in AWS console.
 		CustomLog ${APACHE_LOG_DIR}/access.log combined
 	</VirtualHost>
 	```
-3. Enable the virtual host with the following command: `sudo a2ensite Restaurant-Catalog`
+3. Enable the virtual host with the following command: `sudo a2ensite CatalogApp`
 
 ## Create the .wsgi File
 1. Create the .wsgi File under /var/www/Restaurant-Catalog:
@@ -151,13 +152,15 @@ Meanwhile, add custom port 2200/tcp and 123/tcp in AWS console.
 
 	```
 	#!/usr/bin/python
-	import sys
-	import logging
-	logging.basicConfig(stream=sys.stderr)
-	sys.path.insert(0,"/var/www/Restaurant-Catalog/")
+import sys
+import logging
+import os
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/CatalogApp/")
+os.environ['PYTHON_EGG_CACHE'] = '/tmp/python-eggs'
 
-	from FlaskApp import app as application
-	application.secret_key = 'super_secret_key'
+from CatalogApp import app as application
+application.secret_key = 'super_secret_key'
 	```
 
 ## Restart Apache
