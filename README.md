@@ -71,7 +71,7 @@ Meanwhile, add custom port 2200/tcp and 123/tcp in AWS console.
 3. Login as user "postgres" `sudo su - postgres`
 4. Get into postgreSQL shell `psql`
 5. Create a new database named catalog  and create a new user named catalog in postgreSQL shell
-  ```
+        ```
 	postgres=# CREATE DATABASE catalog;
 	postgres=# CREATE USER catalog;
 	```
@@ -113,9 +113,6 @@ Meanwhile, add custom port 2200/tcp and 123/tcp in AWS console.
    sudo pip install passlib
    ```
 11. Create database schema `sudo python database_setup.py`
-
-
-
 
 
 ## Configure and Enable a New Virtual Host
